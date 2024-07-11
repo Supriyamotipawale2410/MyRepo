@@ -1,0 +1,13 @@
+.carousel-item img {
+    height: 500px;
+    width: 200px;
+    
+}
+.carousel-caption {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+h3,p{
+    color:rgb(237, 235, 246);
+    
+}
