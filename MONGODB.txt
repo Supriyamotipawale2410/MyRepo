@@ -1,0 +1,199 @@
+==>MongoDB is a javascript based
+==>internally uses Mozilla's spider monkey javascript engine
+
+
+==>MongoDB is a document database/NoSql database. It stores data in a type of JSON format called BSON
+==>There are two types of databases
+1)Relational databases
+==>The data will be stored in tables and these tables has fixed schema.
+==>The data stored in tables has relations between them
+==>To retrieve data from relational databases,we have to write join queries which collects data from different table.
+ex: Oracle,Mysql
+ 
+2)Document database
+==>database contains multiple collections
+==>each collection(table) contains multiple documents(record)
+==>each document itself is like a row i.e data will be stored inside document.such database is called document oriented database
+==>data will be stored in seperate document and each document is independent of others.
+ex:MongoDB,Cassandra,HBase
+
+MongoDB structure
+
+==>MongoDB physical database contains several logical databases.
+==>Each database contains several collection.Collection is something like table in relational database.
+==>Each collection contains several documents.Document is something like record/row in relational database.
+eg: Database: shopping cart database(no col,no rows)
+collection: customer,product,orders
+each customer collection  contain several documents
+document1:{
+
+				"name":"raj",
+				 "price":23456;
+			}
+
+document2:{
+
+				"name":"raj",
+				 "price":23456;
+				"product":"tv";
+			}
+document3:{
+
+				"name":"raj",
+				 "salary":23456;
+				"address":
+				{
+						"city":"mumbai"
+				
+			       }
+			}
+//complete data is available in one document only. so no joins requires
+
+Key Characteristic of MongoDB database
+
+1)All information related to a document will be stored in single place. To retrieve data,it is not required to perform join operations
+and hence retrieval is very fast
+2)Documents are independent of each other and no fixed schema. Hence we can store unstructural data like video,audio files etc
+3)We can perform operations like editing existing document,deleting document and inserting new document very easily.
+4)Retrieval of data is in the form of json which can be understandable by any programming lang 
+5)we can store very huge amount of data and hence salability is more.
+======================================================================================
+==>Whenever we install MongoDB in our system,then automatically 2 bydefault applications(javascript based application) we get
+1)MongoDB shell(client) is responsible to manage server. by using shell,we can perform all req crud operations
+2)MongoDB server  is responsible to store data in database
+===============================
+MongoDB installation
+
+https://www.mongodb.com
+resource-->community server--->download
+
+(server)
+C:\Program Files\MongoDB\Server\7.0\bin>mongod -version
+db version v7.0.12
+Build Info: {
+    "version": "7.0.12",
+    "gitVersion": "b6513ce0781db6818e24619e8a461eae90bc94fc",
+    "modules": [],
+    "allocator": "tcmalloc",
+    "environment": {
+        "distmod": "windows",
+        "distarch": "x86_64",
+        "target_arch": "x86_64"
+    }
+}
+
+
+
+
+C:\Program Files\MongoDB\Server\7.0\bin>mongos -version
+mongos version v7.0.12
+Build Info: {
+    "version": "7.0.12",
+    "gitVersion": "b6513ce0781db6818e24619e8a461eae90bc94fc",
+    "modules": [],
+    "allocator": "tcmalloc",
+    "environment": {
+        "distmod": "windows",
+        "distarch": "x86_64",
+        "target_arch": "x86_64"
+    }
+}
+==================================================================
+add location to the classpath
+//system properties --->classpath--->environment var--->edit-->C:\Program Files\MongoDB\Server\7.0\bin ------>ok
+
+start server -->mongod
+create data db
+mongod --dbpath "d:\data\db" //data will be stored
+
+start shell -->mongosh
+===========================================================================
+test> show dbs
+admin   40.00 KiB
+config  72.00 KiB
+local   40.00 KiB
+==========================================
+
+data formats
+
+==>user is sending data to mongodb in json format------------>json will be converted into bson before storing by mongodb server and that bson will be stored.
+==>end user will provide data in json format .in mongodb server,data will be stored in bson form.
+==>at the time of retrieval bson data will be converted to Ejson (extended json)
+==>insertion of document/creation -------------->json to bson
+==<read/retrieval operation------>bson to Ejson
+
+
+why conversion?
+==>in js only 6 types are available i.e number,string,null,object,array,boolean
+==>but bson proovides some extra types
+
+==>bson format req less memory than json
+=========================================================
+CREATION OF DATABASE AND COLLECTION
+==>database will be created dynamically.whenever we are creating collection or inserting document then database will be created dynamically.we cannot create db manually
+
+
+>>show dbs
+test> use morningbatch
+switched to db morningbatch
+
+How to create collection?
+>>db.createCollection("employees")
+>>show dbs
+>>show collections
+
+================================================================
+how to drop collection?
+>>db.employees.drop()
+>>show collections
+=============================================================
+how database will be drop?
+==>current database
+>>db.dropDatabase()
+=============================================================
+Basic crud operations 
+
+1)C- create /insert document
+
+q)how to insert document into the collection
+db.collection.insertOne()
+db.collection.insertMany()
+
+>>db.emp.insertOne({eno:100,ename:"sunny",esal:5000,eaddr:"pune"})
+
+morningbatch> db.employees.insertOne({eno:100,ename:"sunny",esal:5000,eaddr:"pune"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('668dd844c68140d0d2e8e3e8')
+}
+
+>>db.employees.insertMany([{eno:100,ename:"sunny",esal:5000,eaddr:"pune"},{eno:101,ename:"Binny",esal:5000,eaddr:"pune"}])
+
+=======================================================
+R--Read/retrieval
+
+>>db.collection.find() //to get all documents present in given collection
+>>db.employees.find()
+>>db.employees.find().pretty()
+
+3.update operation
+>>db.employees.updateOne()
+>>db.employees.updateMany()
+
+update sunny's salary by 500
+>>db.employees.updateOne({ename:"sunny"},{esal:7000})
+>>db.emp.updateOne({ename:"sunny"},{$set:{esal:7000}})
+>> db.employees.find().pretty()
+
+//error-->some atomic operator req
+//if esal is available then old value will be replaced with   7000
+//if esal is not available then it will be created
+
+
+4)D:delete
+db.collection.deleteOne()
+db.collection.deleteMany()
+
+>>db.collection.deleteOne({ename:"sunny"})
+
+===============================================================================
